@@ -11,10 +11,60 @@
 // score of quiz in displayed
 
 $(document).ready(function() {
-  $("#quizRendered").hide;
+  $("#timer").hide();
+  $("#quizRendered").hide();
+  $("#done-button").hide();
+  var intervalId;
+  var clockRunning = false;
   var right = 0;
   var wrong = 0;
-  var counter = 120;
+  var time = 120;
+
+  function timerStart() {
+    // DONE: Use setInterval to start the count here and set the clock to running.
+    if (!clockRunning) {
+      intervalId = setInterval(count, 1000);
+      clockRunning = true;
+    }
+  }
+  function stop() {
+    // DONE: Use clearInterval to stop the count here and set the clock to not be running.
+    clearInterval(intervalId);
+    clockRunning = false;
+  }
+  function count() {
+    // countdown from 120 seconds decrement time
+    time--;
+
+    // DONE: time converter function taken from stopwatch exercise Get the current time, pass that into the timeConverter function,
+    //       and save the result in a variable.
+    var converted = timeConverter(time);
+    console.log(converted);
+
+    // DONE: Use the variable we just created to show the converted time in the "display" div.
+    $("#timer").text(converted);
+
+    // timer needs to stop when it gets to 0
+    if (time === 0) {
+      stop();
+    }
+  }
+  function timeConverter(t) {
+    var minutes = Math.floor(t / 60);
+    var seconds = t - minutes * 60;
+
+    if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
+
+    if (minutes === 0) {
+      minutes = "0";
+    } else if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+
+    return minutes + ":" + seconds;
+  }
   var questions = [
     {
       question: "What is the name of the main villain in Die Hard?",
@@ -65,7 +115,11 @@ $(document).ready(function() {
   //click on start button starts game
   $("#start-button").on("click", function() {
     console.log("clicked");
-    $("#start-button").hide;
+    $(this).hide();
+    $("#quizRendered").show();
+    $("#timer").show();
+    $("#done-button").show();
+    timerStart();
   });
 
   function renderQuiz() {
@@ -80,17 +134,14 @@ $(document).ready(function() {
         console.log(answer);
         var answerRow = $("<input>");
         answerRow.attr("type", "radio");
-        answerRow.attr("data-answer", answer);
+        answerRow.attr("name", "answer");
+        answerRow.attr("namedata", answer);
         var label = $("<label>");
         label.text(answer);
         $("#quizRendered").append([answerRow, label]);
       });
-
     }
   }
-
-
-
 
   renderQuiz();
   // function to take in each checked answer and compare to correctanswer and update right and wrong count
