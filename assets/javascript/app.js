@@ -14,6 +14,8 @@ $(document).ready(function() {
   $("#timer").hide();
   $("#quizRendered").hide();
   $("#done-button").hide();
+  $("#score-display").hide();
+
   var intervalId;
   var clockRunning = false;
   var right = 0;
@@ -27,7 +29,7 @@ $(document).ready(function() {
       clockRunning = true;
     }
   }
-  function stop() {
+  function timerStop() {
     // DONE: Use clearInterval to stop the count here and set the clock to not be running.
     clearInterval(intervalId);
     clockRunning = false;
@@ -46,7 +48,7 @@ $(document).ready(function() {
 
     // timer needs to stop when it gets to 0
     if (time === 0) {
-      stop();
+      timerStop();
     }
   }
   function timeConverter(t) {
@@ -120,6 +122,7 @@ $(document).ready(function() {
     $("#timer").show();
     $("#done-button").show();
     timerStart();
+    renderQuiz();
   });
 
   function renderQuiz() {
@@ -134,7 +137,7 @@ $(document).ready(function() {
         console.log(answer);
         var answerRow = $("<input>");
         answerRow.attr("type", "radio");
-        answerRow.attr("name", "answer");
+        answerRow.attr("name", "answer" + [i]);
         answerRow.attr("namedata", answer);
         var label = $("<label>");
         label.text(answer);
@@ -143,6 +146,30 @@ $(document).ready(function() {
     }
   }
 
-  renderQuiz();
   // function to take in each checked answer and compare to correctanswer and update right and wrong count
+  // needs to loop through the array of correct answers
+  // variable for the value of checked radion buttons
+  // compare value to answers
+  // update right and wrong
+
+  $("#done-button").on("click", function() {
+    $("#quizRendered").hide();
+    $("#timer").hide();
+    $("#done-button").hide();
+    $("#score-display").show();
+    timerStop();
+    //   questions[i].correctAnswer.forEach();
+    //   var radioValue = $("input[name='answer']:checked").val();
+    //   if (radioValue === correctAnswer) {
+    //     right++;
+    //     console.log(right);
+
+    //     $("#correct-answers").text("Correct: " + right);
+    //   } else {
+    //     wrong++;
+    //     console.log(wrong);
+
+    //     $("#incorrect-answers").text("InCorrect: " + wrong);
+    //   }
+  });
 });
