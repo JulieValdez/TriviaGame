@@ -21,6 +21,7 @@ $(document).ready(function() {
   var right = 0;
   var wrong = 0;
   var time = 120;
+  var correctAnswer = ["Hans", "Robert Ludlum", "13", "Mustang", "5", "Yes"];
 
   function timerStart() {
     // DONE: Use setInterval to start the count here and set the clock to running.
@@ -44,7 +45,7 @@ $(document).ready(function() {
     console.log(converted);
 
     // DONE: Use the variable we just created to show the converted time in the "display" div.
-    $("#timer").text(converted);
+    $("#timer").text("Time Remaining: " + converted);
 
     // timer needs to stop when it gets to 0
     if (time === 0) {
@@ -70,8 +71,7 @@ $(document).ready(function() {
   var questions = [
     {
       question: "What is the name of the main villain in Die Hard?",
-      answers: ["Hans", "Franz", "Karl", "Klaus"],
-      correctAnswer: "Hans"
+      answers: ["Hans", "Franz", "Karl", "Klaus"]
     },
     {
       question:
@@ -81,8 +81,7 @@ $(document).ready(function() {
         "Robert Ludlum",
         "George R.R. Martin",
         "John Grisham"
-      ],
-      correctAnswer: "Robert Ludlum"
+      ]
     },
     {
       question: "How many Fast & Furious movies have been made?",
@@ -91,13 +90,11 @@ $(document).ready(function() {
     },
     {
       question: "What kind of car does John Wick drive?",
-      answers: ["Mustang", "Camaro", "Corvette", "GTO"],
-      correctAnswer: "Mustang"
+      answers: ["Mustang", "Camaro", "Corvette", "GTO"]
     },
     {
       question: "How many actors have played Jack Ryan?",
-      answers: ["3", "6", "5", "4"],
-      coorectAnswer: "5"
+      answers: ["3", "6", "5", "4"]
     },
     {
       question: "Is Die Hard a Christmas movie?",
@@ -105,8 +102,7 @@ $(document).ready(function() {
         "Yes",
         "No",
         "There is too much controversy around this question for me to answer."
-      ],
-      correctAnswer: "Yes"
+      ]
     }
   ];
 
@@ -138,7 +134,7 @@ $(document).ready(function() {
         var answerRow = $("<input>");
         answerRow.attr("type", "radio");
         answerRow.attr("name", "answer" + [i]);
-        answerRow.attr("namedata", answer);
+        answerRow.prop("value", answer);
         var label = $("<label>");
         label.text(answer);
         $("#quizRendered").append([answerRow, label]);
@@ -158,9 +154,34 @@ $(document).ready(function() {
     $("#done-button").hide();
     $("#score-display").show();
     timerStop();
-    //   questions[i].correctAnswer.forEach();
-    //   var radioValue = $("input[name='answer']:checked").val();
-    //   if (radioValue === correctAnswer) {
+    $.each($("input:checked"), function() {
+      console.log(this);
+      for (let i = 0; i < correctAnswer.length; i++) {
+        if ($(this).val() === correctAnswer[i]) {
+          console.log("wins");
+          right++;
+          $("#correct-answers").text("Correct: " + right);
+        } else if ($(this).val() != correctAnswer[i]) {
+          wrong++;
+          console.log("wrong");
+
+          $("#incorrect-answers").text("InCorrect: " + wrong);
+        }
+      }
+    });
+
+    // $("input").on("click", function() {
+    //   var selectedAnswer = $("input:checked").val();
+    //   console.log(selectedAnswer);
+    // });
+
+    // var selectedAnswer = $("input[name='answer0']:checked").val();
+    // if (selectedAnswer) {
+    //   console.log(selectedAnswer);
+    // }
+
+    // for (let j = 0; j < questions.correctAnswer.length; j++) {
+    //   if (selectedAnswer === correctAnswer) {
     //     right++;
     //     console.log(right);
 
@@ -171,5 +192,6 @@ $(document).ready(function() {
 
     //     $("#incorrect-answers").text("InCorrect: " + wrong);
     //   }
+    // }
   });
 });
